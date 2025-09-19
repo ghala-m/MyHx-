@@ -1,5 +1,5 @@
-name: myhx
-description: "A new Flutter project."
+name: myhx_app
+description: "myhx- Smart Medical History Application - AI-powered medical history taking for doctors and medical students."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.9.2
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,14 +30,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  share_plus: ^7.2.2 
+  path_provider: ^2.1.1
+  provider: ^6.0.5 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  http: ^1.2.1
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  shared_preferences: ^2.2.3
+  flutter_svg: ^2.0.10+1
+  firebase_core: ^4.1.0
+  cloud_firestore: ^6.0.1
+ 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pdf: ^3.11.0        
+  printing: ^5.12.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

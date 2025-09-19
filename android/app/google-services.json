@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532125817379",
+    "project_id": "myhx-app",
+    "storage_bucket": "myhx-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532125817379:android:7ccf4d6c392584fc5d6f96",
+        "android_client_info": {
+          "package_name": "com.example.myhx_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQAKoGYwOjp6L7Db2DGFfieMAHlS8gsMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
