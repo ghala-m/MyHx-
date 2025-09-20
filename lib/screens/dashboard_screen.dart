@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
 import '../models/patient.dart';
-import '../utils/colors.dart'; // نحتاجه لبعض الألوان الثابتة
+import '../utils/colors.dart'; // قد لا نحتاجه إذا كانت كل الألوان من الثيم
 import 'patient_record_screen.dart';
-import 'add_patient_screen.dart';
+import 'add_patient_screen.dart'; // <-- استيراد ملف إضافة المريض
 import 'settings_screen.dart';
-import 'reports_screen.dart';
+import 'reports_screen.dart'; // <-- استيراد ملف التقارير
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

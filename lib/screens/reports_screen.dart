@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
-import '../models/patient.dart'; // سنحتاج هذا النموذج
-import 'patient_record_screen.dart'; // الشاشة التي سننتقل إليها
+import '../models/patient.dart';
+import 'patient_record_screen.dart';
 
-// بيانات تجريبية للتقارير، لاحقاً ستأتي من Google Sheets
+// --- *** البيانات التجريبية المصححة بالكامل لتشمل الحقول المطلوبة *** ---
 final List<Map<String, dynamic>> _sampleReports = [
   {
-    'patient': Patient(id: '1',
-     name: 'John Smith',
+    'patient': Patient(
+      id: '1',
+      name: 'John Smith',
       age: 35,
-       gender: 'Male', 
-       phoneNumber: '', 
-       dateOfBirth: DateTime(1988), 
-       createdAt: DateTime.now(), 
-  ),
+      gender: 'Male',
+      dateOfBirth: DateTime(1988),
+      createdAt: DateTime.now(),
+      department: 'Cardiology',
+      wardNumber: 'A3',
+      roomNumber: '101',
+    ),
     'report_date': DateTime.now().subtract(const Duration(days: 1)),
   },
   {
-    'patient': Patient(id: '2', name: 'Sarah Johnson', age: 28, gender: 'Female', phoneNumber: '', dateOfBirth: DateTime(1995), createdAt: DateTime.now(),),
+    'patient': Patient(
+      id: '2',
+      name: 'Sarah Johnson',
+      age: 28,
+      gender: 'Female',
+      dateOfBirth: DateTime(1995),
+      createdAt: DateTime.now(),
+      department: 'Pediatrics',
+      wardNumber: 'B1',
+      roomNumber: '205',
+    ),
     'report_date': DateTime.now().subtract(const Duration(days: 3)),
   },
 ];
@@ -63,7 +76,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         MaterialPageRoute(
                           builder: (context) => PatientRecordScreen(
                             patient: patient,
-                            // في التطبيق الحقيقي، سنمرر التاريخ الطبي والتحليل من Google Sheets
                             medicalHistory: const {}, 
                             aiAnalysis: const {},
                           ),

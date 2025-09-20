@@ -24,13 +24,6 @@ class PatientRecordScreen extends StatefulWidget {
 
 class _PatientRecordScreenState extends State<PatientRecordScreen> {
   bool _isGeneratingPdf = false;
-  
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
 
   Future<void> _generateAndSharePdf() async {
     setState(() { _isGeneratingPdf = true; });
@@ -41,14 +34,14 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
           pageFormat: PdfPageFormat.a4,
           build: (pw.Context context) {
             return [
-              // محتوى الـ PDF يجب أن يعكس كل البيانات المعروضة
               pw.Header(level: 0, child: pw.Text('Medical Report: ${widget.patient.name}', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold))),
               pw.SizedBox(height: 20),
               pw.Text('Patient Information', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
               pw.Text('Name: ${widget.patient.name}'),
               pw.Text('Age: ${widget.patient.age} years'),
               pw.Text('Gender: ${widget.patient.gender}'),
-
+              pw.Text('Department: ${widget.patient.department}'),
+              pw.Text('Ward/Room: ${widget.patient.wardNumber} / ${widget.patient.roomNumber}'),
               pw.SizedBox(height: 20),
               if (widget.medicalHistory != null) ...[
                 pw.Text('Medical History', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
@@ -72,7 +65,7 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red));
     } finally {
-      setState(() { _isGeneratingPdf = false; });
+      if (mounted) setState(() { _isGeneratingPdf = false; });
     }
   }
 
@@ -103,14 +96,12 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
           children: [
             _buildPatientSummaryCard(theme, colors),
             const SizedBox(height: 24),
-      
-            const SizedBox(height: 24),
-            if (widget.medicalHistory != null) ...[
+            if (widget.medicalHistory != null && widget.medicalHistory!.isNotEmpty) ...[
               _buildSectionHeader('Medical History', Icons.history_edu_outlined, colors),
               _buildHistoryDetailsCard(theme, colors, widget.medicalHistory!),
               const SizedBox(height: 24),
             ],
-            if (widget.aiAnalysis != null) ...[
+            if (widget.aiAnalysis != null && widget.aiAnalysis!.isNotEmpty) ...[
               _buildSectionHeader('AI Analysis', Icons.psychology_outlined, colors),
               _buildAiAnalysisCard(theme, colors, widget.aiAnalysis!),
               const SizedBox(height: 24),
@@ -129,13 +120,16 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
           children: [
             Icon(Icons.person_outline, color: colors.primary, size: 40),
             const SizedBox(width: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.patient.name, style: theme.textTheme.titleLarge),
-                const SizedBox(height: 4),
-                Text('${widget.patient.age} years • ${widget.patient.gender}', style: theme.textTheme.bodyMedium),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.patient.name, style: theme.textTheme.headlineSmall),
+                  const SizedBox(height: 4),
+                  Text('${widget.patient.age} years • ${widget.patient.department}'),
+                  Text('Ward: ${widget.patient.wardNumber} / Room: ${widget.patient.roomNumber}'),
+                ],
+              ),
             ),
           ],
         ),
@@ -143,9 +137,6 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
     );
   }
 
-  
-
- 
   Widget _buildHistoryDetailsCard(ThemeData theme, ColorScheme colors, Map<String, dynamic> history) {
     return Card(
       child: Padding(
@@ -170,20 +161,23 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
 
   Widget _buildAiAnalysisCard(ThemeData theme, ColorScheme colors, Map<String, dynamic> analysis) {
     final List<String> diagnoses = List<String>.from(analysis['differential_diagnosis'] ?? []);
-    final List<String> recommendations = List<String>.from(analysis['recommendations'] ?? []);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Differential Diagnosis', style: theme.textTheme.titleMedium),
-            const Divider(),
-            ...diagnoses.map((d) => ListTile(leading: const Icon(Icons.arrow_right), title: Text(d))),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: diagnoses.length,
+              itemBuilder: (context, index) => ListTile(
+                leading: CircleAvatar(child: Text('${index + 1}')),
+                title: Text(diagnoses[index]),
+              ),
+            ),
             const SizedBox(height: 16),
-            Text('Recommendations', style: theme.textTheme.titleMedium),
-            const Divider(),
-            ...recommendations.map((r) => ListTile(leading: const Icon(Icons.check), title: Text(r))),
+            _buildDisclaimer(theme),
           ],
         ),
       ),
@@ -198,6 +192,29 @@ class _PatientRecordScreenState extends State<PatientRecordScreen> {
           Icon(icon, color: colors.primary),
           const SizedBox(width: 8),
           Text(title, style: Theme.of(context).textTheme.titleLarge),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDisclaimer(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.error.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: theme.colorScheme.error.withOpacity(0.2)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.warning_amber_rounded, color: theme.colorScheme.error, size: 20),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text(
+              'Disclaimer: This AI analysis is for informational purposes only and is not a substitute for professional medical advice.',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
         ],
       ),
     );
